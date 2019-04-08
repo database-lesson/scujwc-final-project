@@ -1,2 +1,3 @@
-# scujwcdemo
-This is a class project
+# scujw cdemo
+
+for final project

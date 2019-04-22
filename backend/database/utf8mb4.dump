@@ -206,7 +206,8 @@ CREATE TABLE `grade` (
   `semester` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `year` decimal(4,0) NOT NULL,
   `student` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `grade` decimal(11,0) NOT NULL DEFAULT '0',
+  `grade` decimal(11,0) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL COMMENT '考试状态 0-正常 1-补考 2-缓考',
   PRIMARY KEY (`course_id`,`sec_id`,`semester`,`year`,`student`),
   KEY `fk_stu` (`student`),
   KEY `grade_section__index` (`course_id`,`sec_id`,`semester`,`year`),
@@ -362,6 +363,7 @@ CREATE TABLE `takes` (
   `semester` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `year` decimal(4,0) NOT NULL,
   `grade` varchar(2) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` int(11) NOT NULL COMMENT '选课状态 0-临时选课 1-确定选课',
   PRIMARY KEY (`ID`,`course_id`,`sec_id`,`semester`,`year`),
   KEY `course_id` (`course_id`,`sec_id`,`semester`,`year`),
   CONSTRAINT `takes_ibfk_1` FOREIGN KEY (`course_id`, `sec_id`, `semester`, `year`) REFERENCES `section` (`course_id`, `sec_id`, `semester`, `year`) ON DELETE CASCADE,
@@ -444,4 +446,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-22 10:32:33
+-- Dump completed on 2019-04-22 11:46:36

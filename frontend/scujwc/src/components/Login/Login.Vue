@@ -2,7 +2,9 @@
   <div class="login-wrap">
     <div class="bg"></div>
     <div class="logo">
-      <img src="../../assets/Sculogo.png" alt="logo" width="10%">
+      <a href="http://www.scu.edu.cn/">
+        <img src="../../assets/Sculogo.png" alt="logo" width="10%">
+      </a>
     </div>
 
     <el-row>
@@ -12,7 +14,7 @@
         :md="{span:10, offset:7}"
         :lg="{span: 8, offset:8}"
       >
-        <div class="card" v-loading="loading">
+        <div class="card">
           <div class="title">四川大学教务系统</div>
           <!-- <div class="line"></div> -->
           <el-tooltip class="item" effect="dark" content="点击进入教师端" placement="top">
@@ -118,11 +120,32 @@ export default {
       }
     };
   },
+  created: function() {
+    console.log("created");
+    var _this = this;
+
+    //绑定按键事件
+    document.onkeydown = function(e) {
+      console.log("bind");
+      let k = window.event.keyCode;
+      if (k == 13) {
+        console.log("in");
+        _this.onSubmit("loginform");
+      }
+    };
+  },
   methods: {
     // validateAccount(formname) {
     //   console.log(formname);
     //   this.$refs[formname].validateField("account");
     // },
+    enterKey: function() {
+      this.$message({
+        message: "enter key!",
+        type: "success",
+        showClose: true
+      });
+    },
     onSubmit(formname) {
       // console.log("submit");
       // console.log(this.loginform.account);
@@ -136,7 +159,7 @@ export default {
             showClose: true
           });
           this.$router.push({
-            name: "Info",
+            name: "info",
             params: {
               account: that.loginform.account,
               password: that.loginform.password
@@ -171,6 +194,9 @@ export default {
       if (type === "student") {
         this.$message("move to teacher");
       }
+    },
+    onClickLogo() {
+      this.$message("click on logo");
     }
   }
 };

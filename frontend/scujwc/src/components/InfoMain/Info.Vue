@@ -6,7 +6,7 @@
     <el-row class="user-info-wrap">
       <el-col :span="18" :offset="3">
         <div class="user-info">
-          <div class="avatar" :class="gender"></div>
+          <div class="avatar" :class="gender" @click="onClickAvatar"></div>
           <div class="name hidden-sm-and-down">{{name}}</div>
           <div class="sid hidden-sm-and-down">{{sid}}</div>
           <div class="institute hidden-sm-and-down">{{institute}}</div>
@@ -84,18 +84,24 @@
     <div class="label">信息预览</div>
     <el-row class="control-pane">
       <el-col :span="18" :offset="3">
+        <!-- 改写成不带循环的,每个幻灯片需求不同，同种样式无法满足需求 -->
         <el-carousel :interval="4000" type="card" height="400px" indicator-position="outside">
           <el-carousel-item v-for="(value,key,index) in previewList" :key="key" :label="key">
-            <div class="itemBox" :data-index="index" @click="onClickItem($event)">
+            <div class="itemBox" :data-index="index" @click.self="onClickItem($event)">
               <div class="title">{{key}}</div>
-              <div class="infos">
+              <div class="infos" style="width:100%;">
                 <div class="info" v-for="(v,k,idx) in value" :key="idx">
                   <div class="key">{{k}}</div>
                   <div class="value">{{v}}</div>
                 </div>
               </div>
               <div class="action">
-                <el-button type="primary" :data-index="index" @click="onClickItem($event)">查看更多</el-button>
+                <button
+                  class="el-button el-button--primary"
+                  type="primary"
+                  :data-index="index"
+                  @click="onClickItem($event)"
+                >查看更多</button>
               </div>
             </div>
           </el-carousel-item>
@@ -119,11 +125,20 @@ export default {
           本学期在读课程: 14,
           GPA: 3.39
         },
-        课程管理: {},
-        自习室信息: {},
-        图书馆借阅信息: {},
-        通知: {},
-        选课管理: {}
+        今日课程: {
+          微积分: "一教A203 8:15-9:55",
+          时间管理: "一教A203 8:20-8:55",
+          诗歌朗诵: "一教A203 8:15-9:55"
+        },
+        通知: {
+          有未读消息: 2
+        },
+        选课管理: {
+          提示信息: "当前不在选课时间段"
+        },
+        考试信息: {
+          提示信息: "暂无考试信息" //有多个选课
+        }
       },
       yearToString: ["大一", "大二", "大三", "大四"],
       year: 1,
@@ -136,12 +151,19 @@ export default {
   methods: {
     onClickItem(e) {
       console.log(e.target.dataset);
+      this.$router.push({
+        name: "detail",
+        params: { title: e.target.dataset.index }
+      });
     },
     handleCommand(command) {
       this.$message("click on " + command);
       if (command === "返回首页") {
         this.$router.go(-1);
       }
+    },
+    onClickAvatar() {
+      this.$message("click on avatar");
     }
   }
 };
@@ -149,7 +171,7 @@ export default {
 
 <style scoped>
 .info-wrap {
-  min-width: 600px;
+  min-width: 800px;
   margin: -8px;
   height: calc(100vh);
   width: calc(100vw);
@@ -192,6 +214,10 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   text-align: center;
 } */
+
+.info-wrap .user-info .avatar:hover {
+  cursor: pointer;
+}
 
 .info-wrap .user-info .avatar {
   margin-bottom: 10px;
@@ -291,8 +317,13 @@ export default {
 .control-pane .itemBox .info {
   margin: 10px 0px;
   display: inline-flex;
+  min-width: 80%;
   width: 80%;
   justify-content: space-between;
   align-items: center;
+}
+
+.control-pane .itemBox .action {
+  margin: 10px 0;
 }
 </style>
